@@ -132,7 +132,7 @@ googleBtn.addEventListener('click', async () => {
         const result = await signInWithPopup(auth, provider);
         const user = result.user;
         showToast(`Welcome, ${user.displayName || 'User'}!`, 'success');
-        setTimeout(() => window.location.href = 'sucsses.html', 900);
+        setTimeout(() => window.location.href = 'home/index.html', 900);
     } catch (err) {
         showToast(err.message || 'Google sign up failed', 'error', { duration: 6000 });
     }
@@ -141,4 +141,5 @@ googleBtn.addEventListener('click', async () => {
 
 </body>
 </html>
+
 
