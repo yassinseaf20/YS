@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تحت الإنشاء</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+<style>
+    /* Reset بسيط */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+        font-family: 'Cairo', sans-serif;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: linear-gradient(135deg, #74ebd5 0%, #ACB6E5 100%);
+        overflow: hidden;
+        position: relative;
+    }
+
+    /* خلفية حركات */
+    .circle {
+        position: absolute;
+        border-radius: 50%;
+        opacity: 0.3;
+        animation: float 6s infinite ease-in-out;
+    }
+
+    .circle1 { width: 200px; height: 200px; background: #fff; top: 10%; left: 15%; animation-duration: 8s; }
+    .circle2 { width: 300px; height: 300px; background: #ffddc1; top: 50%; left: 70%; animation-duration: 12s; }
+    .circle3 { width: 150px; height: 150px; background: #fbb1b1; top: 70%; left: 30%; animation-duration: 10s; }
+
+    @keyframes float {
+        0%, 100% { transform: translateY(0) translateX(0); }
+        50% { transform: translateY(-20px) translateX(20px); }
+    }
+
+    .content {
+        position: relative;
+        text-align: center;
+        background: rgba(255, 255, 255, 0.85);
+        padding: 40px 30px;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        max-width: 400px;
+        width: 90%;
+    }
+
+    .content h1 {
+        font-size: 36px;
+        color: #1A48A3;
+        margin-bottom: 20px;
+    }
+
+    .content p {
+        font-size: 18px;
+        color: #333;
+        margin-bottom: 30px;
+    }
+
+    .back-btn {
+        display: inline-block;
+        padding: 12px 28px;
+        background: #1449b8;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background 0.3s, transform 0.2s;
+        text-decoration: none;
+    }
+
+    .back-btn:hover {
+        background: #0f3690;
+        transform: translateY(-3px);
+    }
+
+</style>
+</head>
+<body>
+
+<!-- أشكال خلفية -->
+<div class="circle circle1"></div>
+<div class="circle circle2"></div>
+<div class="circle circle3"></div>
+
+<div class="content">
+    <h1>🚧 تحت الإنشاء 🚧</h1>
+    <p>الصفحة هذه قيد التطوير، سنعود قريباً بمحتوى رائع!</p>
+    <button class="back-btn" onclick="goBack()">رجوع</button>
+</div>
+
+<script>
+function goBack() {
+    window.location.href = 'index.html'; // تأكد أن index.html موجود في نفس المجلد
+}
+</script>
+
+</body>
+</html>

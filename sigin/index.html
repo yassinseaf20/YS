@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Sign Up - Learning Portal</title>
+
+<!-- Favicon -->
+<link rel="icon" href="icon4.png" type="image/png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="toast-container" aria-live="polite" aria-atomic="true"></div>
+<div class="container">
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <div class="subtitle">QUREO</div>
+
+    <div class="logo">
+        <img src="logo.png" alt="SPRIX Logo" width="260" />
+    </div>
+
+    <div class="card">
+        <div class="title">Create Account</div>
+
+        <label>Full Name</label>
+        <input type="text" id="name" placeholder="Your Name" />
+
+        <label>Email</label>
+        <input type="text" id="email" placeholder="Your Email" />
+
+        <label>Password</label>
+        <input type="password" id="pass" placeholder="" />
+
+        <div class="checkbox">
+            <input type="checkbox" id="showPass" onclick="togglePassword()" />
+            <label for="showPass">Show Password</label>
+        </div>
+
+        <button class="login-btn" id="signupBtn">Sign Up</button>
+        <button class="google-btn" id="googleBtn">
+            <img src="https://img.icons8.com/color/20/google-logo.png" alt="Google Icon" /> Sign Up with Google
+        </button>
+    </div>
+
+    <div class="footer-container">
+        <div class="footer-link">
+            <a href="login.html">Already have an account? Login</a>
+        </div>
+
+        <div class="footer-text">©2019 - 2025 YS, Inc. All Rights Reserved.</div>
+    </div>
+</div>
+
+<script>
+function togglePassword() {
+    const p = document.getElementById("pass");
+    p.type = p.type === "password" ? "text" : "password";
+}
+
+function showToast(message, type = 'success', options = {}) {
+    const container = document.getElementById('toast-container');
+    if (!container) return alert(message);
+    const toast = document.createElement('div');
+    toast.className = 'toast ' + (type === 'error' ? 'error' : 'success');
+    const text = document.createElement('div');
+    text.className = 'text';
+    text.textContent = message;
+    const close = document.createElement('button');
+    close.className = 'close';
+    close.innerHTML = '&times;';
+    close.addEventListener('click', () => removeToast(toast));
+    toast.appendChild(text);
+    toast.appendChild(close);
+    container.appendChild(toast);
+    const duration = options.duration || (type === 'error' ? 5000 : 2800);
+    const timeoutId = setTimeout(() => removeToast(toast), duration);
+    function removeToast(el) {
+        if (!el) return;
+        el.style.animation = 'toast-out 200ms ease forwards';
+        setTimeout(() => { try { container.removeChild(el); } catch (e) {} }, 200);
+        clearTimeout(timeoutId);
+    }
+    return toast;
+}
+</script>
+
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js';
+import { getAuth, createUserWithEmailAndPassword, updateProfile, GoogleAuthProvider, signInWithPopup } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js';
+
+const firebaseConfig = {
+    apiKey: "AIzaSyBSMqOOOHZmqlDTeHVqy4TMDWmhqCgq3cc",
+    authDomain: "qureo-2d7af.firebaseapp.com",
+    projectId: "qureo-2d7af",
+    storageBucket: "qureo-2d7af.firebasestorage.app",
+    messagingSenderId: "401635051818",
+    appId: "1:401635051818:web:4d2832cb1ea8a5d7b43653",
+    measurementId: "G-G8GTDXD9HS"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const provider = new GoogleAuthProvider();
+
+const nameInput = document.getElementById('name');
+const emailInput = document.getElementById('email');
+const passInput = document.getElementById('pass');
+const signupBtn = document.getElementById('signupBtn');
+const googleBtn = document.getElementById('googleBtn');
+
+signupBtn.addEventListener('click', async () => {
+    const name = nameInput.value.trim();
+    const email = emailInput.value.trim();
+    const password = passInput.value;
+    if (!name || !email || !password) {
+        showToast('Please fill all fields', 'error');
+        return;
+    }
+    try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        await updateProfile(userCredential.user, { displayName: name });
+        showToast(`Welcome, ${name}!`, 'success');
+        setTimeout(() => window.location.href = '../index.html', 900);
+    } catch (err) {
+        showToast(err.message || 'Sign up failed', 'error', { duration: 6000 });
+    }
+});
+
+googleBtn.addEventListener('click', async () => {
+    try {
+        const result = await signInWithPopup(auth, provider);
+        const user = result.user;
+        showToast(`Welcome, ${user.displayName || 'User'}!`, 'success');
+        setTimeout(() => window.location.href = 'sucsses.html', 900);
+    } catch (err) {
+        showToast(err.message || 'Google sign up failed', 'error', { duration: 6000 });
+    }
+});
+</script>
+
+</body>
+</html>

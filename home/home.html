@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>لوحة التعلم — QUREO YS</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="wrap" role="main" aria-labelledby="pageTitle">
+    <!-- LEFT VISUAL / friendly educational -->
+    <section class="left" aria-label="visual">
+      <div class="hero" role="img" aria-hidden="true">
+        <div class="art">
+          <!-- Using uploaded image path as requested -->
+          <img id="heroImg" src="hth.png" alt="Mascot and laptop illustration">
+        </div>
+        <div style="flex:1;min-width:200px">
+          <h2 id="pageTitle">مرحباً بك في لوحة التعلم</h2>
+          <p>هنا تتابع تقدمك بطريقة مرحة وبسيطة — احصل على الماسات، أكمِل الفصول، واستخدم المحرر للتجربة العملية.</p>
+
+          <div class="metrics" aria-hidden="true">
+            <span class="pill">مهمات يومية</span>
+            <span class="pill">تحديات</span>
+            <span class="pill">محاكاة</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RIGHT PANEL / interactive -->
+    <aside class="right" aria-label="dashboard panel">
+      <div class="user-row">
+        <div class="user-title">
+          <div id="avatar" class="avatar" aria-hidden="true">U</div>
+          <div>
+            <div id="displayName" class="username">المستخدم</div>
+            <div id="emailSmall" class="small-muted">example@gmail.com</div>
+          </div>
+        </div>
+        <div class="badge" id="uidBadge" title="User ID">#0001</div>
+      </div>
+
+      <div class="card" aria-labelledby="diamondsLabel">
+        <div class="row">
+          <div>
+            <div id="diamondsLabel" class="label">الماس المكتسب</div>
+            <div class="value" id="diamondsValue">100</div>
+          </div>
+          <div style="text-align:right">
+            <div class="label">المجموع</div>
+            <div class="value">205</div>
+          </div>
+        </div>
+        <div class="progress-wrap" aria-hidden="true">
+          <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="49">
+            <i id="diamondsBar" style="width:49%"></i>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" aria-labelledby="chaptersLabel">
+        <div class="row">
+          <div>
+            <div id="chaptersLabel" class="label">الفصول المكتملة</div>
+            <div class="value" id="chaptersValue">20</div>
+          </div>
+          <div style="text-align:right">
+            <div class="label">إجمالي الفصول</div>
+            <div class="value">41</div>
+          </div>
+        </div>
+        <div class="progress-wrap" aria-hidden="true">
+          <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="48">
+            <i id="chaptersBar" style="width:48%"></i>
+          </div>
+        </div>
+      </div>
+
+      <div class="actions" role="region" aria-label="actions">
+        <button id="startBtn" class="btn-main" aria-label="Start Learning">ابدأ التعلم</button>
+        <button id="editorBtn" class="btn-secondary" aria-label="Open Editor">افتح المحرر</button>
+      </div>
+
+      <div class="foot-row" aria-hidden="true">
+        <div>نظام متابعة التقدّم</div>
+        <div>QUREO Lite</div>
+      </div>
+    </aside>
+  </main>
+
+  <script>
+    // Simple helper: get query params (we expect index.html to redirect here with ?email=... or ?name=...)
+    const params = new URLSearchParams(window.location.search);
+    const email = params.get('email') || params.get('user') || params.get('name') || '';
+    // derive display name (before @) or full name
+    function nameFromEmail(e){
+      if(!e) return 'زائر';
+      try {
+        if(e.includes('@')) return decodeURIComponent(e.split('@')[0]).replace(/[._]/g,' ').replace(/\+.*$/,'');
+        return decodeURIComponent(e);
+      } catch { return e; }
+    }
+    const displayName = nameFromEmail(email) || 'زائر';
+
+    // fill UI
+    document.getElementById('displayName').innerText = displayName;
+    document.getElementById('emailSmall').innerText = email || 'غير مسجل';
+    // avatar initials
+    const initials = displayName.split(' ').map(s=>s[0]||'').slice(0,2).join('').toUpperCase() || 'U';
+    document.getElementById('avatar').innerText = initials;
+
+    // pretend user id (if needed, you can replace with real uid)
+    const uidBadge = document.getElementById('uidBadge');
+    uidBadge.innerText = '#' + (Math.floor(Math.random()*900000)+100000);
+
+    // Make progress bars animated on appear
+    window.addEventListener('load', ()=>{
+      const dVal = 100; // example values (replace with dynamic data)
+      const dTotal = 205;
+      const cVal = 20;
+      const cTotal = 41;
+      const diamondsPct = Math.round((dVal/dTotal)*100);
+      const chaptersPct = Math.round((cVal/cTotal)*100);
+
+      document.getElementById('diamondsValue').innerText = dVal;
+      document.getElementById('chaptersValue').innerText = cVal;
+      document.getElementById('diamondsBar').style.width = diamondsPct + '%';
+      document.getElementById('chaptersBar').style.width = chaptersPct + '%';
+      // accessibility values
+      document.querySelector('.progress-bar[role="progressbar"]').setAttribute('aria-valuenow', diamondsPct);
+    });
+
+    // Buttons behaviour (example)
+    document.getElementById('startBtn').addEventListener('click', ()=>{
+      alert('تم الضغط على ابدأ — هنا يمكنك تحويل المستخدم لصفحة الدرس.');
+      // window.location.href = 'course.html';
+    });
+    document.getElementById('editorBtn').addEventListener('click', ()=>{
+      alert('فتح المحرر — يمكنك توجيه المستخدم للمحرر هنا.');
+      // window.location.href = 'editor.html';
+    });
+
+    // small hover effect on hero image (mobile safe)
+    const hero = document.getElementById('heroImg');
+    hero.addEventListener('mouseover', ()=> hero.style.transform = 'translateY(-8px)');
+    hero.addEventListener('mouseout',  ()=> hero.style.transform = 'translateY(0)');
+  </script>
+
+  <!-- Firebase auth: populate user info if logged in -->
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js';
+    import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js';
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBSMqOOOHZmqlDTeHVqy4TMDWmhqCgq3cc",
+      authDomain: "qureo-2d7af.firebaseapp.com",
+      projectId: "qureo-2d7af",
+      storageBucket: "qureo-2d7af.firebasestorage.app",
+      messagingSenderId: "401635051818",
+      appId: "1:401635051818:web:4d2832cb1ea8a5d7b43653",
+      measurementId: "G-G8GTDXD9HS"
+    };
+
+    try {
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          // prefer displayName if set, else derive from email
+          const name = user.displayName || (user.email ? user.email.split('@')[0].replace(/[._]/g,' ') : 'المستخدم');
+          const email = user.email || '';
+          const displayNameEl = document.getElementById('displayName');
+          const emailEl = document.getElementById('emailSmall');
+          const avatarEl = document.getElementById('avatar');
+          const uidBadge = document.getElementById('uidBadge');
+
+          if (displayNameEl) displayNameEl.innerText = name;
+          if (emailEl) emailEl.innerText = email || 'غير مسجل';
+          if (avatarEl) avatarEl.innerText = (name.split(' ').map(s=>s[0]||'').slice(0,2).join('')||'U').toUpperCase();
+          if (uidBadge) uidBadge.innerText = '#' + (user.uid ? user.uid.slice(0,6) : (Math.floor(Math.random()*900000)+100000));
+        } else {
+          // no logged-in user — keep existing behavior or redirect to login
+          // window.location.href = '/';
+          console.info('No authenticated user found');
+        }
+      });
+    } catch (e) {
+      console.warn('Firebase init failed', e);
+    }
+  </script>
+</body>
+</html>
